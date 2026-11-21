@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Santanu Dutta · Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm, confident engineer — few words, lots of night air.
+   IDEA: a stack drawn as a galaxy; every tool is a star cluster orbiting the person.
+   PICTURE: three stacked canvases — orbits + clusters, a WebGL chrome "S", front clusters + hover cards.
+   COLOUR and TYPE: near-black #090a0b in both themes, white ink, one ice-cyan accent; Plus Jakarta Sans 800/400.
+   LAYOUT: hero copy left over the galaxy, then clients row, work grid, repos, timeline, stack, contact. */
+:root{color-scheme:dark;--bg:#090a0b;--ink:#f4f5f6;--mute:#9aa1a9;--dim:#6b7178;--line:rgba(255,255,255,.08);--card:#0e1012;--acc:#7de3f4;--accInk:#05181c}
+:root[data-theme=light],:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1240px;margin:0 auto;padding:0 max(5vw,16px)}
+.band{padding:clamp(56px,7vw,104px) 0;border-top:1px solid var(--line)}
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(30px,3.6vw,44px);line-height:1.08;text-wrap:balance;max-width:20ch}
+.lede{color:var(--mute);max-width:60ch;margin:14px 0 0}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;background:rgba(9,10,11,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:24px;height:60px}
+.mark{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;flex:none}
+.mark i{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:15px;color:var(--accInk);background:var(--acc)}
+.links{display:flex;gap:22px;margin-left:auto;color:var(--mute);font-size:15px}
+.links a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;border-radius:10px;font-weight:600;font-size:15px;border:1px solid var(--line);transition:background .2s,border-color .2s;flex:none}
+.btn.pri{background:var(--acc);color:var(--accInk);border-color:var(--acc)}
+.btn.pri:hover{background:#a5ecf8}
+.btn.ghost{background:#0d0f11}
+.btn.ghost:hover{border-color:rgba(255,255,255,.22)}
+.btn.sm{height:38px;padding:0 14px;font-size:14px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+
+/* hero + galaxy */
+.hero{position:relative;min-height:min(800px,calc(100vh - 60px));display:flex;align-items:center;overflow:hidden}
+.galaxy{position:absolute;inset:0;touch-action:pan-y;user-select:none;cursor:grab}
+.galaxy canvas{position:absolute;inset:0;width:100%;height:100%}
+.galaxy #gCore{inset:auto;pointer-events:auto;touch-action:none;cursor:grab;border-radius:50%}
+.galaxy #gFront{pointer-events:none}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,var(--bg) 0%,rgba(9,10,11,.78) 30%,rgba(9,10,11,.35) 45%,rgba(9,10,11,0) 62%)}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:140px;z-index:1;pointer-events:none;background:linear-gradient(transparent,var(--bg))}
+.copy{position:relative;z-index:2;pointer-events:none;width:100%}
+.copy a{pointer-events:auto}
+.copy h1{font-size:clamp(44px,6vw,76px);line-height:1.02;max-width:11ch;text-wrap:balance}
+.copy p{color:#c3c8ce;font-size:clamp(16px,1.3vw,18px);max-width:46ch;margin:22px 0 28px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.stats{display:flex;gap:36px;margin-top:30px;flex-wrap:wrap}
+.stats b{display:block;font-size:20px;font-weight:700}
+.stats span{color:var(--mute);font-size:13px}
+.tip{position:absolute;left:0;top:0;z-index:3;width:270px;padding:13px 15px;border-radius:12px;background:rgba(13,15,17,.94);border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 50px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .18s}
+.tip.on{opacity:1}
+.tip small{color:var(--mute);font-size:13px;display:flex;align-items:center;gap:8px}
+.tip small i{width:8px;height:8px;border-radius:50%;background:var(--acc)}
+.tip strong{display:block;font-size:16px;margin:4px 0 8px}
+.tip p{margin:0;padding-top:9px;border-top:1px solid var(--line);color:#c3c8ce;font-size:13.5px;line-height:1.5}
+.hint{position:absolute;right:max(5vw,16px);bottom:28px;z-index:2;color:var(--dim);font-size:13px}
+
+/* clients */
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:48px;padding-top:40px;padding-bottom:88px}
+.about p{margin:0 0 16px;color:#c3c8ce;font-size:17px;max-width:62ch}
+@media(max-width:900px){.about{grid-template-columns:minmax(0,1fr);gap:20px}}
+
+/* work */
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,transform .2s}
+.card:hover{border-color:rgba(125,227,244,.35);transform:translateY(-2px)}
+.card .k{color:var(--mute);font-size:13px;display:flex;justify-content:space-between;gap:8px}
+.card .k b{color:var(--acc);font-weight:600}
+.card h3{font-size:20px;line-height:1.2}
+.card p{margin:0;color:#b5bbc2;font-size:15px;flex:1}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tags span{font-size:13px;color:#cfd4d9;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.also{color:var(--mute);margin:22px 0 0;font-size:15px}
+
+/* repos */
+.repos{margin-top:36px;border-top:1px solid var(--line)}
+.repo{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.6fr) auto;gap:20px;align-items:center;padding:18px 4px;border-bottom:1px solid var(--line);transition:background .2s}
+.repo:hover{background:rgba(255,255,255,.025)}
+.repo b{font-weight:600;overflow-wrap:anywhere}
+.repo p{margin:0;color:var(--mute);font-size:15px}
+.lang{display:flex;align-items:center;gap:8px;color:var(--mute);font-size:14px;white-space:nowrap}
+.lang i{width:10px;height:10px;border-radius:50%}
+.more{display:inline-block;margin-top:22px;color:var(--acc);font-weight:600}
+
+/* experience */
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:48px;align-items:start}
+.tl{list-style:none;margin:0;padding:0;border-left:1px solid var(--line)}
+.tl li{position:relative;padding:0 0 30px 26px}
+.tl li::before{content:"";position:absolute;left:-5px;top:7px;width:9px;height:9px;border-radius:50%;background:#2a2e33;border:1px solid #3a3f45}
+.tl li.now::before{background:var(--acc);border-color:var(--acc);box-shadow:0 0 0 5px rgba(125,227,244,.15)}
+.tl h3{font-size:19px}
+.tl .when{color:var(--mute);font-size:14px;white-space:nowrap}
+.tl p{margin:6px 0 0;color:#b5bbc2;font-size:15px}
+
+/* stack */
+.stack{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin-top:40px}
+.stack h3{font-size:15px;color:var(--mute);font-weight:600;margin-bottom:12px}
+.stack ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.stack li{display:flex;align-items:center;gap:10px;font-size:15px}
+.stack li i{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:700;background:#121417;border:1px solid rgba(255,255,255,.12)}
+
+/* contact */
+.contact{text-align:center;padding:clamp(72px,9vw,130px) 0;border-top:1px solid var(--line);background:radial-gradient(600px 260px at 50% 100%,rgba(125,227,244,.08),transparent)}
+.contact h2{margin:0 auto;max-width:16ch}
+.contact p{color:var(--mute);margin:16px auto 30px;max-width:46ch}
+.contact .cta{justify-content:center}
+footer{border-top:1px solid var(--line);color:var(--dim);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:24px;padding-bottom:24px}
+
+@media(max-width:960px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stack{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:minmax(0,1fr);gap:28px}}
+@media(max-width:900px){
+  .hero{flex-direction:column;align-items:stretch;min-height:0;padding-top:48px}
+  .hero::before{display:none}
+  .galaxy{position:relative;inset:auto;height:440px;order:2;margin-top:8px}
+  .hint{display:none}
+}
+@media(max-width:700px){.links{display:none}nav .btn{margin-left:auto}}
+@media(max-width:600px){.grid,.stack{grid-template-columns:minmax(0,1fr)}.repo{grid-template-columns:minmax(0,1fr) auto}.repo p{grid-column:1/-1;grid-row:2}.galaxy{height:380px}.stats{gap:26px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.btn{transition:none}}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="mark" href="#top"><i>S</i>Santanu Dutta</a>
+  <div class="links"><a href="#about">About</a><a href="#work">Work</a><a href="#code">Projects</a><a href="#experience">Experience</a><a href="#contact">Contact</a></div>
+  <a class="btn ghost sm" href="https://github.com/git-santanu">GitHub ↗</a>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="galaxy" id="galaxy" aria-label="My tech stack drawn as a galaxy. Hover a star for details.">
+    <canvas id="gBack"></canvas>
+    <canvas id="gCore" width="512" height="512"></canvas>
+    <canvas id="gFront"></canvas>
+    <div class="tip" id="tip" role="status"></div>
+  </div>
+  <div class="copy wrap">
+    <h1>Hi, I'm Santanu</h1>
+    <p>A frontend engineer from Howrah, India. I take complicated products and turn them into calm, fast interfaces, mostly with React, TypeScript and a good design system.</p>
+    <div class="cta">
+      <a class="btn pri" href="#work">See my work</a>
+      <a class="btn ghost" href="https://github.com/git-santanu">GitHub profile ↗</a>
+    </div>
+    <div class="stats">
+      <div><b>4+</b><span>years of experience</span></div>
+      <div><b>37</b><span>GitHub repos</span></div>
+      <div><b id="nTools">20+</b><span>tools I use</span></div>
+    </div>
+  </div>
+  <div class="hint">Drag to spin · grab the S to turn it · hover a star</div>
+</header>
+
+<section class="wrap about" id="about">
+  <h2>About me</h2>
+  <div>
+    <p>I've spent the last four years building web apps, mostly the heavy kind: dashboards, approval flows, admin tools and the design systems that hold them together. I care about the details people feel but rarely notice, like a layout that never jumps, a theme that just works, or a build that finishes before your coffee does.</p>
+    <p>Outside the day job, I keep building small things to learn, and lately I've been deep into build tooling, testing pipelines and playing with local AI models.</p>
+  </div>
+</section>
+
+<section class="band" id="work"><div class="wrap">
+  <h2>Things I've built</h2>
+  <p class="lede">A few pieces of work I'm proud of, from my day job building enterprise web apps.</p>
+  <div class="grid" id="workGrid"></div>
+  <p class="also">Also: single sign-on login, permission-aware dashboard charts and file upload with validation.</p>
+</div></section>
+
+<section class="band" id="code"><div class="wrap">
+  <h2>Side projects</h2>
+  <p class="lede">Things I built to learn, from algorithm practice to full-stack auth and CRUD apps. All on GitHub.</p>
+  <div class="repos" id="repoList"></div>
+  <a class="more" href="https://github.com/git-santanu?tab=repositories">All 37 repositories →</a>
+</div></section>
+
+<section class="band" id="experience"><div class="wrap two">
+  <div>
+    <h2>Experience</h2>
+    <p class="lede">Frontend first, but I also enjoy product design and working closely with the people who use what I build.</p>
+  </div>
+  <ol class="tl">
+    <li class="now"><h3>TRPGlobal <span style="color:var(--mute);font-weight:500">· Risk Success Pvt Ltd</span></h3><div class="when">Software Development Engineer · Current</div><p>Building the frontend of an enterprise risk and compliance platform, plus a hand in product design and business analysis.</p></li>
+    <li><h3>CodeLogicx Pvt Ltd</h3><div class="when">From September 2022</div><p>Building web applications.</p></li>
+    <li><h3>SDI</h3><div class="when">Earlier</div><p>Where my professional journey started.</p></li>
+  </ol>
+</div></section>
+
+<section class="band" id="stack"><div class="wrap">
+  <h2>Skills</h2>
+  <p class="lede">The same tools you see in the galaxy above, grouped by what I use them for.</p>
+  <div class="stack" id="stackGrid"></div>
+</div></section>
+
+<section class="contact" id="contact"><div class="wrap">
+  <h2>Let's talk</h2>
+  <p>Whether it's a role, a project or just a chat about frontend, I'd love to hear from you.</p>
+  <div class="cta"><a class="btn pri" href="https://github.com/git-santanu">Say hi on GitHub ↗</a></div>
+</div></section>
+
+<footer><div class="wrap"><span>Designed and built by Santanu Dutta · 2026</span><span>Salkia, Howrah · India</span></div></footer>
+
+<script>
+{
+const NODES=[
+ {g:'Re',n:'React',c:'Frontend',w:3,d:'My home base. Most of what I build every day: complex workflows, dashboards and admin tools.'},
+ {g:'Nx',n:'Nx',c:'Build & quality',w:2,d:'I work in large Nx monorepos and enjoy keeping them fast and tidy.'},
+ {g:'Mt',n:'Mantine UI v7',c:'Frontend',w:2,d:'My go-to component library for building design-system wrappers.'},
+ {g:'Rs',n:'Rspack',c:'Build & quality',w:2,d:'Currently moving a big monorepo from webpack to Rspack for quicker builds.'},
+ {g:'RTK',n:'Redux Toolkit · RTK Query',c:'Frontend',w:2,d:'How I handle app state and server-data caching.'},
+ {g:'tw',n:'Tailwind CSS',c:'Frontend',w:2,d:'Utility styling, including setups that live side by side with a component library.'},
+ {g:'WS',n:'WebSockets',c:'Frontend',w:1,d:'Live progress and status updates without page refreshes.'},
+ {g:'Hc',n:'Highcharts',c:'Frontend',w:1,d:'Dashboards and charts, themed to match light and dark mode.'},
+ {g:'Pw',n:'Playwright',c:'Build & quality',w:2,d:'End-to-end tests that decide whether a release ships.'},
+ {g:'TS',n:'TypeScript',c:'Frontend',w:2,d:'Typed components and API contracts.'},
+ {g:'Hp',n:'Hapi.js',c:'Backend & data',w:2,d:'My favourite Node framework for APIs. See jwt-Auth-Hapi and Vue-Hapi-CRUD.'},
+ {g:'MF',n:'Module Federation',c:'Build & quality',w:1,d:'Micro-frontends in Next.js and Nx setups.'},
+ {g:'JS',n:'JavaScript',c:'Frontend',w:3,d:'Where it all started: DSA in JS, a food app and a Swiggy clone.'},
+ {g:'Sb',n:'Storybook',c:'Build & quality',w:1,d:'Building and testing components in isolation.'},
+ {g:'Nd',n:'Node.js',c:'Backend & data',w:2,d:'APIs and the tooling around my frontends.'},
+ {g:'Nx.',n:'Next.js',c:'Frontend',w:1,d:'Server rendering, hydration and micro-frontend hosts.'},
+ {g:'My',n:'MySQL · Sequelize',c:'Backend & data',w:2,d:'Relational data through the Sequelize ORM.'},
+ {g:'CI',n:'GitHub Actions · Jenkins',c:'Build & quality',w:1,d:'Pipelines with test gates between dev, pre-release and release.'},
+ {g:'V',n:'Vue',c:'Frontend',w:1,d:'A Vue + Hapi CRUD app on my GitHub.'},
+ {g:'Ex',n:'Express.js',c:'Backend & data',w:1,d:'Lightweight Node services.'},
+ {g:'Pg',n:'PostgreSQL',c:'Backend & data',w:1,d:'Relational data on Postgres.'},
+ {g:'Ol',n:'Ollama',c:'AI',w:1,d:'Playing with local LLMs and wiring them into apps.'}
+];
+const WORK=[
+ {k:'Theming',t:'Dark mode, done properly',d:'Brought three styling systems (a component library, Tailwind and a charting library) under one set of semantic design tokens, so a single switch themes the whole app.',s:['Design tokens','Mantine','Tailwind','Highcharts']},
+ {k:'Interaction',t:'Drag-and-drop role assignment',d:'A Kanban-style board for giving people access: drag users onto roles, assign in bulk, and keep it usable from five users to five hundred.',s:['React','Redux Toolkit','Drag and drop']},
+ {k:'Real time',t:'Live status, no refresh',d:'Long-running jobs report progress live as a small pill badge, pushed over WebSockets from a pub/sub backend.',s:['WebSockets','React','Pub/sub']},
+ {k:'Performance',t:'webpack → Rspack',d:'Moving a large monorepo to Rspack for faster builds, with a plan to bring Nx and Node up to date alongside it.',s:['Rspack','Nx','Node.js'],b:'In progress'},
+ {k:'Quality',t:'Tests that guard releases',d:'A pipeline where component tests run on every merge and end-to-end tests have to pass before anything reaches QA.',s:['Storybook','Playwright','CI/CD']},
+ {k:'Data',t:'Version diff viewer',d:'A side-by-side before / after view for comparing two versions of a large rule set, including removed items.',s:['React','Data grid']}
+];
+const REPOS=[
+ ['dsa_js-by-Santanu','JavaScript','Data structures and algorithms, worked through in JavaScript.'],
+ ['jwt-Auth-Hapi','JavaScript','JWT authentication API built on Hapi.js.'],
+ ['Vue-Hapi-CRUD','Vue','CRUD app with a Vue front end and a Hapi API.'],
+ ['swiggy-clone-by-santanu','JavaScript','A Swiggy-style food delivery UI clone.'],
+ ['foodapp','JavaScript','A food ordering app.'],
+ ['jwtAuth','JavaScript','JWT sign-in and protected-route flow.']
+];
+const LANG={JavaScript:'#f1e05a',Vue:'#41b883'};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+document.getElementById('workGrid').innerHTML=WORK.map(w=>`<article class="card"><div class="k"><span>${w.k}</span>${w.b?`<b>${w.b}</b>`:''}</div><h3>${esc(w.t)}</h3><p>${esc(w.d)}</p><div class="tags">${w.s.map(s=>`<span>${esc(s)}</span>`).join('')}</div></article>`).join('');
+document.getElementById('repoList').innerHTML=REPOS.map(([n,l,d])=>`<a class="repo" href="https://github.com/git-santanu/${n}"><b>${n}</b><p>${d}</p><span class="lang"><i style="background:${LANG[l]}"></i>${l}</span></a>`).join('');
+const CATS=['Frontend','Backend & data','Build & quality','AI'];
+document.getElementById('stackGrid').innerHTML=CATS.map(c=>`<div><h3>${c}</h3><ul>${NODES.filter(n=>n.c===c).map(n=>`<li><i>${esc(n.g.replace('.',''))}</i>${esc(n.n)}</li>`).join('')}</ul></div>`).join('');
+document.getElementById('nTools').textContent=NODES.length;
+
+/* ---------- galaxy ---------- */
+const gal=document.getElementById('galaxy'),cb=document.getElementById('gBack'),cf=document.getElementById('gFront'),cg=document.getElementById('gCore'),tip=document.getElementById('tip');
+const xb=cb.getContext('2d'),xf=cf.getContext('2d');
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ACC=[125,227,244],ORB=[.36,.52,.68,.85,1.02],TILT=-.12;
+let seed=11;const rnd=()=>(seed=seed*16807%2147483647)/2147483647;
+let W=0,H=0,dpr=1,cx=0,cy=0,R0=300,sc=1,wide=true;
+let cdrag=null,cX=0,cY=0,vX=0,vY=0,drag=null,vel=0,yaw=0,flat=.34,mx=-1e4,my=-1e4,px=0,py=0,tpx=0,tpy=0,hov=null,t=0,spd=1,last=0,running=false,glDraw=null;
+
+const nodes=NODES.map((d,i)=>{
+  const dots=[];const cnt=10+d.w*14,spread=20+d.w*15;
+  for(let k=0;k<cnt;k++){const a=rnd()*6.283,r=8+Math.pow(rnd(),.75)*spread;
+    dots.push({x:Math.cos(a)*r*1.55,y:Math.sin(a)*r*.78,r:.6+rnd()*1.9*(1-r/(spread+14))+.2,a:.25+rnd()*.5,l:rnd()<.45,p:rnd()*6.283});}
+  return {...d,o:i%ORB.length,a:i*2.39996+rnd()*.4,dots,x:0,y:0,z:0,s:1};
+});
+const stars=Array.from({length:300},()=>({x:rnd(),y:rnd(),r:.3+rnd()*.9,a:.08+rnd()*.35,p:rnd()*6.283}));
+const pulses=Array.from({length:7},(_,i)=>({n:(i*3+1)%nodes.length,dx:(rnd()-.5)*70,dy:(rnd()-.5)*36,p:rnd()*6.283}));
+
+function size(){
+  const r=gal.getBoundingClientRect();W=r.width;H=r.height;dpr=Math.min(devicePixelRatio||1,2);wide=W>900;
+  for(const c of [cb,cf]){c.width=Math.round(W*dpr);c.height=Math.round(H*dpr);}
+  cx=wide?W*.68:W*.5;cy=H*(wide?.5:.5);
+  R0=wide?Math.min(W*.5,H*1.35):Math.min(W*.66,H*.95);
+  sc=Math.max(.75,Math.min(1.25,R0/380));
+  const core=Math.round(Math.min(R0*.78,420));
+  Object.assign(cg.style,{width:core+'px',height:core+'px',left:(cx-core/2)+'px',top:(cy-core/2)+'px'});
+  if(glDraw){const res=Math.min(512,Math.round(core*dpr*1.4));cg.width=cg.height=res;}
+}
+function place(n){
+  const rx=ORB[n.o]*R0,ry=rx*flat,lx=rx*Math.cos(n.a),ly=ry*Math.sin(n.a),c=Math.cos(TILT),s=Math.sin(TILT);
+  n.z=Math.sin(n.a);const f=n.z>=0?1:-.5;
+  n.x=cx+lx*c-ly*s+px*f;n.y=cy+lx*s+ly*c+py*f;n.s=(.8+.2*(n.z+1))*sc;
+}
+function drawNode(x,n){
+  const S=n.s,hot=n===hov,fade=hot?1:(.5+.25*(n.z+1))*(wide?Math.min(1,Math.max(.12,(n.x-W*.3)/(W*.2))):1);
+  x.globalAlpha=fade;x.lineWidth=hot?.8:.6;
+  x.strokeStyle=hot?`rgba(${ACC},.45)`:'rgba(255,255,255,.075)';
+  x.beginPath();for(const d of n.dots)if(d.l){x.moveTo(n.x,n.y);x.lineTo(n.x+d.x*S,n.y+d.y*S);}x.stroke();
+  for(const d of n.dots){const tw=.75+.25*Math.sin(t*1.4+d.p);
+    x.fillStyle=hot?`rgba(${ACC},${Math.min(1,d.a*1.7)*tw})`:`rgba(205,210,218,${d.a*tw})`;
+    x.beginPath();x.arc(n.x+d.x*S,n.y+d.y*S,d.r*S*(hot?1.25:1),0,6.283);x.fill();}
+  x.globalAlpha=1;
+  const R=13*S;
+  if(hot){x.strokeStyle=`rgba(${ACC},.9)`;x.lineWidth=1.2;x.beginPath();x.arc(n.x,n.y,R+7,0,6.283);x.stroke();}
+  x.fillStyle='#111316';x.strokeStyle=hot?`rgba(${ACC},.8)`:'rgba(255,255,255,.14)';x.lineWidth=1;
+  x.beginPath();x.arc(n.x,n.y,R,0,6.283);x.fill();x.stroke();
+  const g=n.g.replace('.','');
+  x.fillStyle=hot?'#fff':`rgba(232,235,239,${fade})`;x.font=`700 ${(g.length>2?8.5:10.5)*S}px "Plus Jakarta Sans",sans-serif`;
+  x.textAlign='center';x.textBaseline='middle';x.fillText(g,n.x,n.y+.5);
+}
+function drawBack(){
+  const x=xb;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
+  const gr=x.createRadialGradient(cx,cy,0,cx,cy,R0*.9);gr.addColorStop(0,'rgba(255,255,255,.06)');gr.addColorStop(1,'rgba(255,255,255,0)');
+  x.fillStyle=gr;x.fillRect(0,0,W,H);
+  for(const s of stars){x.fillStyle=`rgba(255,255,255,${s.a*(.7+.3*Math.sin(t*.8+s.p))})`;x.beginPath();x.arc(s.x*W,s.y*H,s.r,0,6.283);x.fill();}
+  x.lineWidth=1;
+  ORB.forEach((k,i)=>{x.strokeStyle=`rgba(255,255,255,${.05+i*.008})`;x.beginPath();x.ellipse(cx+px*.2,cy+py*.2,k*R0,k*R0*flat,TILT,0,6.283);x.stroke();});
+  if(!glDraw){x.fillStyle='rgba(235,238,242,.9)';x.font=`800 ${R0*.3}px "Plus Jakarta Sans",sans-serif`;x.textAlign='center';x.textBaseline='middle';x.fillText('S',cx,cy);}
+  nodes.filter(n=>n.z<0).sort((a,b)=>a.z-b.z).forEach(n=>drawNode(x,n));
+}
+function drawFront(){
+  const x=xf;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
+  nodes.filter(n=>n.z>=0).sort((a,b)=>a.z-b.z).forEach(n=>drawNode(x,n));
+  for(const p of pulses){const n=nodes[p.n],k=.5+.5*Math.sin(t*1.6+p.p);
+    x.strokeStyle=`rgba(${ACC},${.2+.45*k})`;x.lineWidth=1.1;x.beginPath();x.arc(n.x+p.dx*n.s,n.y+p.dy*n.s,(5+3*k)*n.s,0,6.283);x.stroke();}
+}
+function pick(){
+  let best=null,bd=1e9;
+  for(const n of nodes){const d=Math.hypot(n.x-mx,n.y-my);if(d<26*n.s&&d<bd){bd=d;best=n;}}
+  if(best!==hov){hov=best;gal.style.cursor=hov?'pointer':'grab';
+    if(hov){tip.innerHTML=`<small><i></i>${esc(hov.c)}</small><strong>${esc(hov.n)}</strong><p>${esc(hov.d)}</p>`;tip.classList.add('on');}
+    else tip.classList.remove('on');}
+}
+function moveTip(){
+  if(!hov)return;const tw=tip.offsetWidth,th=tip.offsetHeight;
+  let x=hov.x+24,y=hov.y-th-18;
+  if(x+tw>W-12)x=hov.x-tw-24;if(x<12)x=12;if(y<12)y=hov.y+24;if(y+th>H-12)y=H-th-12;
+  tip.style.transform=`translate(${x}px,${y}px)`;
+}
+function frame(now){
+  const dt=last?Math.min((now-last)/1000,.05):0;last=now;
+  spd+=((hov?.1:1)-spd)*.08;
+  if(!RM){t+=dt;for(const n of nodes)n.a+=dt*spd*.055/(1+n.o*.55);}
+  if(!drag&&Math.abs(vel)>.0005){const st=RM?0:vel*dt;for(const n of nodes)n.a+=st;yaw+=st*1.6;vel*=Math.pow(.94,dt*60);}else if(!drag)vel=0;
+  if(!drag)yaw*=Math.pow(.985,dt*60);
+  if(!cdrag&&!RM&&Math.abs(vX)+Math.abs(vY)>.001){cX+=vX*dt;cY+=vY*dt;const k=Math.pow(.95,dt*60);vX*=k;vY*=k;}
+  px+=(tpx-px)*.06;py+=(tpy-py)*.06;
+  for(const n of nodes)place(n);
+  if(mx>-1e3&&!drag)pick();
+  drawBack();drawFront();moveTip();
+  if(glDraw)glDraw(RM?0:t,tpx/12,tpy/8,yaw+cY,(flat-.34)*1.2+cX);
+  if(running)requestAnimationFrame(frame);else last=0;
+}
+gal.addEventListener('pointermove',e=>{const r=gal.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;
+  if(!RM){tpx=(mx/W-.5)*12;tpy=(my/H-.5)*8;}
+  if(drag){const now=performance.now(),dx=e.clientX-drag.x,dy=e.clientY-drag.y,dt=Math.max(16,now-drag.t)/1000;
+    if(!drag.moved&&Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)>4){drag.moved=true;hov=null;tip.classList.remove('on');gal.style.cursor='grabbing';}
+    if(drag.moved){const da=-dx*.006;for(const n of nodes)n.a+=da;yaw+=da*1.6;vel=vel*.6+(da/dt)*.4;
+      if(e.pointerType==='mouse')flat=Math.max(.16,Math.min(.62,flat+dy*.0016));}
+    drag.x=e.clientX;drag.y=e.clientY;drag.t=now;}});
+const endDrag=e=>{if(!drag)return;if(performance.now()-drag.t>90)vel=0;drag=null;gal.style.cursor=hov?'pointer':'grab';};
+cg.addEventListener('pointerdown',e=>{e.stopPropagation();cdrag={x:e.clientX,y:e.clientY,t:performance.now()};vX=vY=0;
+  cg.style.cursor='grabbing';hov=null;tip.classList.remove('on');try{cg.setPointerCapture(e.pointerId);}catch(_){}});
+cg.addEventListener('pointermove',e=>{if(!cdrag)return;e.stopPropagation();
+  const now=performance.now(),dt=Math.max(16,now-cdrag.t)/1000,ay=-(e.clientX-cdrag.x)*.012,ax=(e.clientY-cdrag.y)*.012;
+  cY+=ay;cX+=ax;vY=vY*.5+(ay/dt)*.5;vX=vX*.5+(ax/dt)*.5;cdrag.x=e.clientX;cdrag.y=e.clientY;cdrag.t=now;});
+const cEnd=()=>{if(!cdrag)return;if(performance.now()-cdrag.t>90)vX=vY=0;cdrag=null;cg.style.cursor='grab';};
+cg.addEventListener('pointerup',cEnd);cg.addEventListener('pointercancel',cEnd);
+gal.addEventListener('pointerup',endDrag);gal.addEventListener('pointercancel',endDrag);
+gal.addEventListener('pointerdown',e=>{const r=gal.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;
+  drag={x:e.clientX,y:e.clientY,sx:e.clientX,sy:e.clientY,t:performance.now(),moved:false};vel=0;try{gal.setPointerCapture(e.pointerId);}catch(_){}});
+gal.addEventListener('pointerleave',()=>{if(drag)return;mx=my=-1e4;hov=null;tip.classList.remove('on');gal.style.cursor='grab';tpx=tpy=0;});
+
+/* WebGL chrome "S" — raymarched, extruded from a 2D signed-distance S */
+function initGL(){
+  const gl=cg.getContext('webgl',{alpha:true,premultipliedAlpha:true,antialias:false});
+  if(!gl){cg.style.display='none';return null;}
+  const vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  const fs=`precision highp float;uniform vec2 R;uniform float T;uniform vec2 M;uniform vec2 D;float Y,X;
+mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}
+float sdArc(vec2 p,vec2 sc,float ra,float rb){p.x=abs(p.x);return((sc.y*p.x>sc.x*p.y)?length(p-sc*ra):abs(length(p)-ra))-rb;}
+float sdS(vec2 p){float ra=.34,rb=.085;vec2 sc=vec2(.866,-.5);mat2 m=rot(1.0472);vec2 c=vec2(0.,ra);
+ return min(sdArc(m*(p-c),sc,ra,rb),sdArc(m*(-p-c),sc,ra,rb));}
+float map(vec3 p){p.xz=rot(Y)*p.xz;p.yz=rot(X)*p.yz;vec2 w=vec2(sdS(p.xy),abs(p.z)-.08);
+ return min(max(w.x,w.y),0.)+length(max(w,0.))-.035;}
+vec3 nor(vec3 p){vec2 e=vec2(.0015,-.0015);return normalize(e.xyy*map(p+e.xyy)+e.yyx*map(p+e.yyx)+e.yxy*map(p+e.yxy)+e.xxx*map(p+e.xxx));}
+vec3 pal(float t){return .5+.5*cos(6.2831*(t+vec3(0.,.33,.67)));}
+vec3 env(vec3 r){float sk=smoothstep(-.2,1.,r.y);vec3 c=mix(vec3(.015,.018,.022),vec3(.8,.83,.88),sk);
+ c+=smoothstep(.93,.99,sin(r.x*4.+r.y*2.+T*.25))*vec3(.9);c+=pal(dot(r,vec3(.4,.7,.3))*.9+T*.03)*.2;return c;}
+void main(){vec2 uv=(gl_FragCoord.xy*2.-R)/R.y;Y=sin(T*.35)*.6+M.x*.06+D.x;X=sin(T*.23)*.18-M.y*.05+D.y;
+ vec3 ro=vec3(0.,0.,3.2),rd=normalize(vec3(uv,-1.8));float t=0.,h=1.;
+ for(int i=0;i<90;i++){h=map(ro+rd*t);if(h<.001||t>6.)break;t+=h;}
+ if(h>.002){gl_FragColor=vec4(0.);return;}
+ vec3 p=ro+rd*t,n=nor(p),r=reflect(rd,n);float f=pow(1.-max(dot(n,-rd),0.),3.);vec3 L=normalize(vec3(-.5,.8,.6));
+ vec3 col=vec3(.05,.055,.06)+env(r)*(.55+.45*f);col+=pow(max(dot(r,L),0.),48.)*vec3(1.);col+=vec3(.49,.89,.96)*pow(f,2.)*.4;
+ col=1.-exp(-col*1.5);gl_FragColor=vec4(col,1.);}`;
+  const sh=(type,src)=>{const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){console.warn(gl.getShaderInfoLog(s));return null;}return s;};
+  const v=sh(gl.VERTEX_SHADER,vs),f=sh(gl.FRAGMENT_SHADER,fs);if(!v||!f){cg.style.display='none';return null;}
+  const pr=gl.createProgram();gl.attachShader(pr,v);gl.attachShader(pr,f);gl.linkProgram(pr);
+  if(!gl.getProgramParameter(pr,gl.LINK_STATUS)){cg.style.display='none';return null;}
+  gl.useProgram(pr);const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  const loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  const uR=gl.getUniformLocation(pr,'R'),uT=gl.getUniformLocation(pr,'T'),uM=gl.getUniformLocation(pr,'M'),uD=gl.getUniformLocation(pr,'D');
+  gl.clearColor(0,0,0,0);
+  return (time,mxn,myn,dyaw,dpit)=>{gl.viewport(0,0,cg.width,cg.height);gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform2f(uR,cg.width,cg.height);gl.uniform1f(uT,time);gl.uniform2f(uM,mxn,myn);gl.uniform2f(uD,dyaw,dpit);gl.drawArrays(gl.TRIANGLES,0,3);};
+}
+glDraw=initGL();
+size();
+const ro=new ResizeObserver(()=>{size();if(!running)requestAnimationFrame(frame);});ro.observe(gal);
+const io=new IntersectionObserver(es=>{const vis=es[0].isIntersecting&&!document.hidden;if(vis&&!running){running=true;requestAnimationFrame(frame);}else if(!vis)running=false;});
+io.observe(gal);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)running=false;else{const r=gal.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight&&!running){running=true;requestAnimationFrame(frame);}}});
+if(document.fonts)document.fonts.ready.then(()=>{if(!running)requestAnimationFrame(frame);});
+}
+</script>
+</body>
+</html>
