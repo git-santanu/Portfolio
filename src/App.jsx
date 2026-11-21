@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import Galaxy from './components/Galaxy';
+import profile from 'url:./assets/profile.jpg';
 import { NODES, WORK, REPOS, LANG, CATS } from './data';
 
 const GITHUB = 'https://github.com/git-santanu';
@@ -18,11 +20,23 @@ function Nav() {
   );
 }
 
+function Avatar() {
+  const [failed, setFailed] = useState(false);
+  return (
+    <div className="avatar">
+      {failed ? <span aria-hidden="true">S</span> : (
+        <img src={profile} alt="Santanu Dutta" width="120" height="120" decoding="async" fetchPriority="high" onError={() => setFailed(true)} />
+      )}
+    </div>
+  );
+}
+
 function Hero() {
   return (
     <header className="hero" id="top">
       <Galaxy />
       <div className="copy wrap">
+        <Avatar />
         <h1>Hi, I'm Santanu</h1>
         <p>A frontend engineer from Howrah, India. I take complicated products and turn them into calm, fast interfaces, mostly with React, TypeScript and a good design system.</p>
         <div className="cta">
