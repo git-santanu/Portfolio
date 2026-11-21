@@ -25,7 +25,7 @@ function Avatar() {
   return (
     <div className="avatar">
       {failed ? <span aria-hidden="true">S</span> : (
-        <img src={profile} alt="Santanu Dutta" width="120" height="120" decoding="async" fetchPriority="high" onError={() => setFailed(true)} />
+        <img src={profile} alt="Santanu Dutta" width="120" height="120" decoding="async" fetchpriority="high" onError={() => setFailed(true)} />
       )}
     </div>
   );
