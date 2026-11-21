@@ -38,7 +38,7 @@ function Hero() {
       <div className="copy wrap">
         <Avatar />
         <h1>Hi, I'm Santanu</h1>
-        <p>A frontend engineer from Howrah, India. I take complicated products and turn them into calm, fast interfaces, mostly with React, TypeScript and a good design system.</p>
+        <p>A frontend engineer based on Kolkata, India. I take complicated products and turn them into calm, fast interfaces, mostly with React, TypeScript and a good design system.</p>
         <div className="cta">
           <a className="btn pri" href="#work">See my work</a>
           <a className="btn ghost" href={GITHUB}>GitHub profile ↗</a>
